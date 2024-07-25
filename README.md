@@ -8,6 +8,7 @@ This project is using parts of the interface of the [GTK library](https://gtk.or
 
 ### Building requirements
 **You need**:
++ **GTK4**
 + **CMake** 3.12 or higher
 + A **C11 compiler**(We recommend GCC, because it ships with many Distros preinstalled.)
 + A building system compatible with your compiler and cmake(When using GCC make is the best option, because it's part of the GCC suit)
