@@ -11,7 +11,7 @@ extern int app_run(int argc, char** argv) {
 }
 
 static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
-  GtkWidget* window = gtk_window_new();
+  GtkWidget* window = gtk_application_window_new(app);
 
   gtk_window_set_title(GTK_WINDOW(window), "S-Master4's Timer");
   gtk_window_set_default_size(GTK_WINDOW(window), 200, 200);
