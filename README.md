@@ -17,7 +17,7 @@ This project is using parts of the interface of the [GTK library](https://gtk.or
 **If you know that you have all of those things allready installed, you can skip to *Acctually Building the project*.**
 
 #### GTK4
-I don't know anyway of amking sure someone has GTK installed, but most Distros ship with it on default so there is mostly no need to install it, but if you encounter issues just run
+I don't know anyway of making sure someone has GTK installed, but most Distros ship with it on default so there is mostly no need to install it, but if you encounter issues just run:
 
 **on Debian**:
 ```bash
