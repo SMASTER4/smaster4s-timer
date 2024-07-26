@@ -1,8 +1,13 @@
 # About
-This is a easy to use GTK based timer primarly for Linux. That's it, nothing revolutionary. I just made it, because I miss a timer. I know that there are about 1,000 other open source timers for Linux, but **I DON'T CARE**. It's my little simplicit timer. No fancy cool looking UI just GTK. I don't think there is much else to say.
+This is a easy to use GTK based timer primarly for Linux. That's it, nothing revolutionary.
+I just made it, because I miss a timer.
+I know that there are about 1,000 other open source timers for Linux, but **I DON'T CARE**.
+It's my little simplicit timer. No fancy cool looking UI just GTK.
+I don't think there is much else to say.
 
 # Important information
-This project is using parts of the interface of the [GTK library](https://gtk.org/) and linking the [GTK library](https://gtk.org/) while compilation, which is licensed under the [GNU Lesser General Public License v2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html) upwards.
+This project is using parts of the interface of the [GTK library](https://gtk.org/) and linking the [GTK library](https://gtk.org/) while compilation,
+which is licensed under the [GNU Lesser General Public License v2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html) upwards.
 
 # Building from source
 
@@ -17,7 +22,9 @@ This project is using parts of the interface of the [GTK library](https://gtk.or
 **If you know that you have all of those things allready installed, you can skip to *Acctually Building the project*.**
 
 #### GTK4
-I don't know anyway of making sure someone has GTK installed, but most Distros ship with it on default so there is mostly no need to install it, but if you encounter issues just run:
+I don't know anyway of making sure someone has GTK installed,
+but most Distros ship with it on default so there is mostly no need to install it,
+but if you encounter issues just run:
 
 **on Debian**:
 ```bash
@@ -33,7 +40,8 @@ To verify that CMake is installed on the right version try running:
 ```bash
 cmake --version
 ```
-If it says 3.12 upwards, you can proceed. If it says anything other than that, install CMake, please. You do this this **on Debian** based Distros(Ubuntu included) like this:
+If it says 3.12 upwards, you can proceed. If it says anything other than that, install CMake, please.
+You do this this **on Debian** based Distros(Ubuntu included) like this:
 ```bash
 sudo apt install cmake
 ```
@@ -41,14 +49,17 @@ sudo apt install cmake
 ```bash
 sudo pacman -S cmake
 ```
-If you have neither of those, I recommend you just try to install a package called cmake with your package manager. You can also try the official [download site](https://cmake.org/download/), if that didn't work or you have no package manager.
+If you have neither of those, I recommend you just try to install a package called cmake with your package manager.
+You can also try the official [download site](https://cmake.org/download/), if that didn't work or you have no package manager.
 
 #### C11 Compiler
-You will also need a C11 compiler. I recommend GCC, but really anything supporting C11 like clang or whatever else should also work. When assuming you chose GCC, the next step would be verifying if it's installed. For that run:
+You will also need a C11 compiler. I recommend GCC, but really anything supporting C11 like clang or whatever else should also work.
+When assuming you chose GCC, the next step would be verifying if it's installed. For that run:
 ```bash
 gcc --version
 ```
-If it prints out the version, you can skip installing GCC. If it prints out anything else, then installing GCC is required first.
+If it prints out the version, you can skip installing GCC.
+If it prints out anything else, then installing GCC is required first.
 
 Do this **on Debian** and it's derivates by running:
 ```bash
@@ -58,10 +69,13 @@ sudo apt install gcc
 ```bash
 sudo pacman -S gcc
 ```
-Like I said before if neither of those is your operating system trying to install a package called gcc with your package manager should on most Distros install gcc. If you Windows using MinGW-w64 should also work.
+Like I said before if neither of those is your operating system trying to install a package called gcc with your package manager should on most Distros install gcc.
+If you Windows using MinGW-w64 should also work.
 
 #### Git
-This point is optional, but if you haven't allready installed the sources. The recommended way of doing this is by using Git. If you don't, if you installed Git jus run:
+This point is optional, but if you haven't allready installed the sources.
+The recommended way of doing this is by using Git.
+If you don't, if you installed Git jus run:
 ```bash
 git --version
 ```
@@ -96,8 +110,10 @@ cd out # Keep in mind that you need to change the name if you've used a differen
 ```bash
 cmake ..
 ```
-Now some new files and directory's should appear inside your out or whatever name you have choosen directory. If it doesn't, try analysing the issue based on the output of the last command.
-6. Now we can finally build the real binary. We do this differently depending on the compiler and building tool we chose. Look at the documentation of your toolchain if you are unsure what to do, but if we are using GCC and Make you can just do:
+Now some new files and directory's should appear inside your out or whatever name you have choosen directory.
+If it doesn't, try analysing the issue based on the output of the last command.
+6. Now we can finally build the real binary. We do this differently depending on the compiler and building tool you chose.
+Look at the documentation of your toolchain if you are unsure what to do, but if we are using GCC and Make you can just do:
 ```bash
 make
 ```
