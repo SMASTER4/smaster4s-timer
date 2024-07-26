@@ -1,5 +1,5 @@
 # About
-This is a easy to use GTK based timer primarly for Linux. That's it. Nothing revolutionary. I just made it, because I miss a timer. I know that there are about 1,000 other open source timers for Linux, but **I DON'T CARE**. It's my little simplicit timer. No fancy cool looking UI just GTK. I don't think there is much else to say.
+This is a easy to use GTK based timer primarly for Linux. That's it, nothing revolutionary. I just made it, because I miss a timer. I know that there are about 1,000 other open source timers for Linux, but **I DON'T CARE**. It's my little simplicit timer. No fancy cool looking UI just GTK. I don't think there is much else to say.
 
 # Important information
 This project is using parts of the interface of the [GTK library](https://gtk.org/) and linking the [GTK library](https://gtk.org/) while compilation, which is licensed under the [GNU Lesser General Public License v2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html) upwards.
