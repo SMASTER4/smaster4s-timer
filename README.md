@@ -16,6 +16,18 @@ This project is using parts of the interface of the [GTK library](https://gtk.or
 
 **If you know that you have all of those things allready installed, you can skip to *Acctually Building the project*.**
 
+#### GTK4
+I don't know anyway of amking sure someone has GTK installed, but most Distros ship with it on default so there is mostly no need to install it, but if you encounter issues just run
+
+**on Debian**:
+```bash
+sudo apt install libgtk-4-1 libgkt-4-dev libgtk-4-common # I don't know if all of those are required, but it's better to install them all
+```
+and **on Arch Linux**:
+```bash
+sudo pacman -S gtk4
+```
+
 #### CMake
 To verify that CMake is installed on the right version try running:
 ```bash
@@ -78,7 +90,7 @@ mkdir out # You can change the name to be anything you want
 ```
 4. Now we can just jump inside the directory we created:
 ```bash
-cd out # Keep in mind that you need to change the name if you've used a different name 
+cd out # Keep in mind that you need to change the name if you've used a different name
 ```
 5. It's time to finally start building the CMake stuff by running:
 ```bash
