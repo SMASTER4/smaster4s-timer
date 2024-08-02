@@ -1,6 +1,9 @@
 #include <gtk/gtk.h>
 
+#include <strings.h>
+
 #include "gui.h"
+#include "common.h"
 
 static const char* _layout_relative_path = "/.config/smaster4s-timer/main.ui";
 
@@ -15,16 +18,15 @@ extern int gui_run(int argc, char** argv) {
 
 static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
   GtkBuilder* builder = gtk_builder_new();
-  {
-    const char* home_path = getenv("HOME");
-    if(home_path == NULL) {
-      g_error("You have no HOME enviorement variable. Please define HOME to be your home directory.");
-      return;
-    }
-    char layout_full_path[strlen(home_path) + strlen(_layout_relative_path) + 1];
-    sprintf(layout_full_path, "%s%s", home_path, _layout_relative_path);
-    gtk_builder_add_from_file(builder, layout_full_path, NULL);
+  const char* home_path = getenv("HOME");
+  if(home_path == NULL) {
+    g_error("You have no HOME enviorement variable. Please define HOME to be your home directory.");
+    return;
   }
+  char* layout_full_path = g_malloc(strlen(home_path) + strlen(_layout_relative_path) + 1);
+  sprintf(layout_full_path, "%s%s", home_path, _layout_relative_path);
+  gtk_builder_add_from_file(builder, layout_full_path, NULL);
+  g_free(layout_full_path);
 
   GObject* window = gtk_builder_get_object(builder, "window");
   if(window == NULL) {
