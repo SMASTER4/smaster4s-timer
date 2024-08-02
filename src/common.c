@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <time.h>
@@ -23,6 +22,6 @@ extern const time_t parse_delay(const char* delay_as_string) {
   return delay;
 }
 
-extern const unsigned int get_lenght_as_string(const unsigned int value) {
-  return pow(0.1, value) - 1;
+extern const unsigned short int get_lenght_as_string(const unsigned int value) {
+  return (value == 0 ? 1 : (int) (log10(value) + 1));
 }
