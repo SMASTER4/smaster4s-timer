@@ -34,12 +34,12 @@ static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
   if(timer_entry != NULL)
     g_signal_connect(GTK_ENTRY(timer_entry), "activate", G_CALLBACK(_SIGNAL_timer_entry_activate), NULL);
 
-  GObject* start_timer_button = gtk_builder_get_object(builder, "start_timer_button");
-  if(start_timer_button != NULL)
+  GObject* timer_button = gtk_builder_get_object(builder, "timer_button");
+  if(timer_button != NULL)
     if(timer_entry != NULL)
-      g_signal_connect(GTK_BUTTON(start_timer_button), "clicked", G_CALLBACK(_SIGNAL_start_timer_button_clicked), timer_entry);
+      g_signal_connect(GTK_BUTTON(timer_button), "clicked", G_CALLBACK(_SIGNAL_timer_button_clicked), timer_entry);
     else
-      g_warning("You can't use the start_timer_button without a time_entry");
+      g_warning("You can't use the timer_button without a time_entry");
 
   gtk_window_present(GTK_WINDOW(window));
   g_object_unref(builder);
@@ -49,7 +49,7 @@ static void _SIGNAL_timer_entry_activate(GtkEntry* timer_entry, gpointer user_da
   g_timeout_add(1000, (GSourceFunc)_timer_entry_update, timer_entry);
 }
 
-static void _SIGNAL_start_timer_button_clicked(GtkButton* start_timer_button, gpointer user_data) {
+static void _SIGNAL_timer_button_clicked(GtkButton* timer_button, gpointer user_data) {
   g_timeout_add(1000, (GSourceFunc)_timer_entry_update, user_data);
 }
 
