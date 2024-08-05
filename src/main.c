@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <string.h>
 
 #include "gui.h"
 #ifdef __linux__
