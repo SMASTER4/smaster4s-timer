@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 
+#include <stdio.h>
 #include <strings.h>
 
 #include "gui.h"
@@ -34,6 +35,37 @@ static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
     return;
   }
   gtk_window_set_application(GTK_WINDOW(window), app);
+  GObject* timer_entry = gtk_builder_get_object(builder, "timer_entry");
+  if(timer_entry != NULL)
+    g_signal_connect(GTK_ENTRY(timer_entry), "activate", G_CALLBACK(_SIGNAL_timer_entry_activate), NULL);
 
   gtk_window_present(GTK_WINDOW(window));
+  g_object_unref(builder);
+}
+
+static void _SIGNAL_timer_entry_activate(GtkEntry* timer_entry, gpointer user_data) {
+  g_timeout_add(1000, (GSourceFunc)_timer_entry_update, timer_entry);
+}
+
+static gboolean _timer_entry_update(GtkEntry* timer_entry) {
+  if(timer_entry == NULL)
+    return FALSE;
+  GtkEntryBuffer* timer_entry_buffer = gtk_entry_get_buffer(timer_entry);
+  int parsed_delay_buffer[3];
+  parse_delay(gtk_entry_buffer_get_text(timer_entry_buffer), parsed_delay_buffer);
+  parsed_delay_buffer[2]--;
+  for(size_t i = 2; i > 0; i--) {
+    if(parsed_delay_buffer[i] < 0) {
+      parsed_delay_buffer[i] += 60;
+      parsed_delay_buffer[i - 1] -= floor(parsed_delay_buffer[i] / 60) + 1;
+    }
+  }
+  if(parsed_delay_buffer[0] < 0)
+    return FALSE;
+  size_t updated_delay_formated_length = get_lenght_as_string(parsed_delay_buffer[0]) + get_lenght_as_string(parsed_delay_buffer[1]) + get_lenght_as_string(parsed_delay_buffer[2]) + 2 + 1;
+  char* updated_delay_formated = g_malloc(updated_delay_formated_length);
+  snprintf(updated_delay_formated, updated_delay_formated_length, "%d:%d:%d", parsed_delay_buffer[0], parsed_delay_buffer[1], parsed_delay_buffer[2]);
+  gtk_entry_buffer_set_text(timer_entry_buffer, updated_delay_formated, strlen(updated_delay_formated));
+  g_free(updated_delay_formated);
+  return TRUE;
 }
