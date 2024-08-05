@@ -4,6 +4,8 @@
 #include "common.h"
 
 extern void parse_delay(const char* delay_as_string, int parsed_delay_buffer[3]) {
+  for(size_t i = 0; i < 3; i++)
+      parsed_delay_buffer[i] = 0;
   if(strlen(delay_as_string) > 30)
     return;
   short unsigned int current_time_unit = 0;
