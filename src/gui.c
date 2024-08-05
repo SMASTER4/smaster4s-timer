@@ -1,12 +1,18 @@
 #include <gtk/gtk.h>
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <strings.h>
 
 #include "gui.h"
 #include "common.h"
 
+#ifdef __linux__
 static const char* _layout_relative_path = "/.config/smaster4s-timer/main.ui";
+#endif
+#ifdef _WIN32
+static const char* _layout_relative_path = "/smaster4s-timer/main.ui";
+#endif
 
 extern int gui_run(int argc, char** argv) {
   g_print("Application launches in GUI mode.\n");
@@ -19,9 +25,19 @@ extern int gui_run(int argc, char** argv) {
 
 static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
   GtkBuilder* builder = gtk_builder_new();
+  #ifdef __linux__
   const char* home_path = getenv("HOME");
+  #endif
+  #ifdef _WIN32
+  const char* home_path = getenv("APPDATA");
+  #endif
   if(home_path == NULL) {
+    #ifdef __linux__
     g_error("You have no HOME enviorement variable. Please define HOME to be your home directory.");
+    #endif
+    #ifdef _WIN32
+    g_error("You have no APPDATA enviorement variable. Please define APPDATA to be your app data folder. (It should mostly be C:\\Users\\!YOUR_USER_NAME!\\AppData\\Roaming\\)"); // btw folder != directory
+    #endif
     return;
   }
   char* layout_full_path = g_malloc(strlen(home_path) + strlen(_layout_relative_path) + 1);
