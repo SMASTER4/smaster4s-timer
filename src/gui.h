@@ -8,4 +8,6 @@ static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data);
 
 static void _SIGNAL_timer_entry_activate(GtkEntry* timer_entry, gpointer user_data);
 
+static void _SIGNAL_start_timer_button_clicked(GtkButton* start_timer_button, gpointer user_data);
+
 static gboolean _timer_entry_update(GtkEntry* timer_entry);
