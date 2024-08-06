@@ -28,7 +28,7 @@ but if you encounter issues just run:
 
 **on Debian**:
 ```bash
-sudo apt install libgtk-4-1 libgkt-4-dev libgtk-4-common # I don't know if all of those are required, but it's better to install them all
+sudo apt install libgkt-4-dev
 ```
 and **on Arch Linux**:
 ```bash
