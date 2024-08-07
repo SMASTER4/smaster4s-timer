@@ -6,6 +6,8 @@ It's my little simplicit timer. No fancy cool looking UI just GTK.
 I don't think there is much else to say.
 
 # Important information
+This project is still indevelopement so it is maybe not the best or stable timer and using this as a all day tool and replacement for more advanced timers like KTimer or Gnome Clocks is not recommended, but if you think you can improve it opening a pull request with a new cool feature is allways good.
+
 This project is using parts of the interface of the [GTK library](https://gtk.org/) and linking the [GTK library](https://gtk.org/) while compilation,
 which is licensed under the [GNU Lesser General Public License v2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html) upwards.
 
