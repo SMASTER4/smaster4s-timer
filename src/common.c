@@ -42,10 +42,10 @@ extern char* get_config_path(const char* additional_path) {
   #endif
   if(home_path == NULL) {
     #ifdef __linux__
-    fprintf(stderr, "You have no HOME enviorement variable. Please define HOME to be your home directory.");
+    fprintf(stderr, "You have no HOME enviorement variable. Please define HOME to be your home directory.\n");
     #endif
     #ifdef _WIN32
-    fprintf(stderr, "You have no APPDATA enviorement variable. Please define APPDATA to be your app data folder. (It should mostly be C:\\Users\\!YOUR_USER_NAME!\\AppData\\Roaming\\)"); // btw folder != directory
+    fprintf(stderr, "You have no APPDATA enviorement variable. Please define APPDATA to be your app data folder. (It should mostly be C:\\Users\\!YOUR_USER_NAME!\\AppData\\Roaming\\\n)"); // btw folder != directory
     #endif
     return NULL;
   }
