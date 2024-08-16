@@ -50,7 +50,7 @@ extern char* get_config_path(const char* additional_path) {
     return NULL;
   }
   const size_t config_full_path_length = strlen(home_path) + strlen(_config_relative_path) + strlen(additional_path) + 1;
-  char* config_full_path = (char*) malloc(config_full_path_length);
+  char* config_full_path = malloc(config_full_path_length);
   snprintf(config_full_path, config_full_path_length, "%s%s%s", home_path, _config_relative_path, additional_path);
   return config_full_path;
 }
