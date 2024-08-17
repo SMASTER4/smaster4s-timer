@@ -1,5 +1,13 @@
 #include <gtk/gtk.h>
 
+#ifdef __unix__
+#include <unistd.h>
+#endif
+#ifdef _WIN32
+#include <io.h>
+#define access _access
+#include "file_flags.h"
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
@@ -19,7 +27,9 @@ extern int gui_run(int argc, char** argv) {
 
 static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
   GtkBuilder* builder = gtk_builder_new();
-  char* layout_full_path = get_config_path("/main.ui");
+  char* layout_full_path = get_config_path("main.ui");
+  if(layout_full_path == NULL)
+    return;
   gtk_builder_add_from_file(builder, layout_full_path, NULL);
 
   GObject* window = gtk_builder_get_object(builder, "window");
@@ -92,12 +102,23 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
   }
   if(parsed_delay_buffer[0] < 0) {
     timer_entry_state->timer_entry_update_tag = 0;
+    _timer_notify();
     return FALSE;
   }
   size_t updated_delay_formated_length = get_lenght_as_string(parsed_delay_buffer[0]) + get_lenght_as_string(parsed_delay_buffer[1]) + get_lenght_as_string(parsed_delay_buffer[2]) + 2 + 1;
   char* updated_delay_formated = g_malloc(updated_delay_formated_length);
   snprintf(updated_delay_formated, updated_delay_formated_length, "%d:%d:%d", parsed_delay_buffer[0], parsed_delay_buffer[1], parsed_delay_buffer[2]);
   gtk_entry_buffer_set_text(timer_entry_buffer, updated_delay_formated, strlen(updated_delay_formated));
+
   g_free(updated_delay_formated);
   return TRUE;
+}
+
+static void _timer_notify() {
+  GNotification* notification = g_notification_new("Timer ended");
+  g_notification_add_button(notification, "Okay", "app.button");
+  GApplication* app = g_application_get_default();
+  g_application_send_notification(app, NULL, notification);
+
+  g_object_unref(notification);
 }
