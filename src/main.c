@@ -3,6 +3,8 @@
 #ifdef __unix__
 #include <unistd.h>
 #endif
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #ifdef _WIN32
 #include <io.h>
@@ -23,21 +25,36 @@ int main(int argc, char** argv) {
   if(getenv("DESKTOP_SESSION") == NULL)
     status = cli_run(argc, argv);
   #endif
-  char* config_path = get_config_path("main.ui");
+  char* layout_path = get_config_path("main.ui");
+  char* layout_dir_path = get_config_path("");
 
   if(
     #ifdef __unix__
-    access(config_path, R_OK)
+    access(layout_path, R_OK)
     #endif
     #ifdef _WIN32
-    _access(config_path, R_OK) // Yeah really its _access: https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/access-waccess
+    _access(layout_path, R_OK) // Yeah really its _access: https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/access-waccess
     #endif
     !=
     0
   ) {
-    FILE* file = fopen(config_path, "w");
+    struct stat st = {0};
+    if(stat(layout_dir_path, &st) != 0)
+      mkdir(layout_dir_path, 0777);
+
+    FILE* file = fopen(layout_path, "w");
+    if(file == NULL) {
+      printf("A fialure while trying to write to %s accured. Maybe you don't have the required premissions.\n", layout_path);
+      free(layout_path);
+      free(layout_dir_path);
+      return -1;
+    }
+
     fprintf(file, default_layout);
     fclose(file);
+
+    free(layout_path);
+    free(layout_dir_path);
   }
 
   status = gui_run(argc, argv);
