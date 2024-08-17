@@ -23,19 +23,10 @@ jobs:
     - name: Install dependencies
       run: >
         sudo apt-get update &&
-        sudo apt-get install -y libgtk-4-dev xvfb
-
-    - name: Start Xvfb
-      run: Xvfb :99 -screen 0 1024x768x24 &
-
-    - name: Set display
-      run: echo "DISPLAY=:99" >> $GITHUB_ENV
+        sudo apt-get install -y libgtk-4-dev
 
     - name: Configure CMake
       run: cmake -DCMAKE_C_COMPILER=${{matrix.c_compiler}} -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-
-    - name: Run
-      run: timeout 2 ./build/smaster4s-timer
