@@ -16,6 +16,8 @@ static void _SIGNAL_timer_entry_activate(GtkEntry* timer_entry, gpointer user_da
 
 static void _SIGNAL_timer_button_clicked(GtkButton* timer_button, gpointer user_data);
 
+static void _load_css();
+
 static void _timer_toggle(struct timer_entry_state* timer_entry_state);
 
 static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state);

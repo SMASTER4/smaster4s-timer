@@ -26,6 +26,8 @@ extern int gui_run(int argc, char** argv) {
 }
 
 static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
+  _load_css();
+
   GtkBuilder* builder = gtk_builder_new();
   char* layout_full_path = get_config_path("main.ui");
   if(layout_full_path == NULL)
@@ -34,7 +36,7 @@ static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
 
   GObject* window = gtk_builder_get_object(builder, "window");
   if(window == NULL) {
-    g_error("The window object inside ~%s couldn't be found!", layout_full_path);
+    g_error("The window object inside %s couldn't be found!", layout_full_path);
     free(layout_full_path);
     return;
   }
@@ -67,6 +69,21 @@ static void _SIGNAL_timer_entry_activate(GtkEntry* timer_entry, gpointer user_da
 
 static void _SIGNAL_timer_button_clicked(GtkButton* timer_button, gpointer user_data) {
   _timer_toggle(user_data);
+}
+
+static void _load_css() {
+  char* css_path = get_config_path("main.css");
+  if(css_path == NULL)
+    return;
+
+  GError** error;
+
+  GtkCssProvider *provider = gtk_css_provider_new();
+  gtk_css_provider_load_from_path(provider, css_path);
+  gtk_style_context_add_provider_for_display(gdk_display_get_default(), GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+  g_object_unref(provider);
+  free(css_path);
 }
 
 static void _timer_toggle(struct timer_entry_state* timer_entry_state) {
