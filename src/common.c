@@ -2,8 +2,18 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#ifdef __unix__
+#include <unistd.h>
+#endif
+#include <sys/stat.h>
+#include <sys/types.h>
+#ifdef _WIN32
+#include <io.h>
 
+#include "file_flags.h"
+#endif
 #include "common.h"
+#include "default_layout.h"
 
 #ifdef __linux__
 static const char* _config_relative_path = "/.config/smaster4s-timer/";
@@ -53,4 +63,36 @@ extern char* get_config_path(const char* additional_path) {
   char* config_full_path = malloc(config_full_path_length);
   snprintf(config_full_path, config_full_path_length, "%s%s%s", home_path, _config_relative_path, additional_path);
   return config_full_path;
+}
+
+extern void create_layout_if_required() {
+    char* layout_path = get_config_path("main.ui");
+    char* layout_dir_path = get_config_path("");
+    if(
+        #ifdef __unix__
+        access(layout_path, R_OK)
+        #endif
+        #ifdef _WIN32
+        _access(layout_path, R_OK) // Yeah really its _access: https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/access-waccess
+        #endif
+        !=
+        0
+      ) {
+        struct stat st = {0};
+        if(stat(layout_dir_path, &st) != 0)
+          mkdir(layout_dir_path, 0777);
+
+        FILE* file = fopen(layout_path, "w");
+        if(file == NULL) {
+          printf("A fialure while trying to write to %s accured. Maybe you don't have the required premissions.\n", layout_path);
+          goto clean;
+        }
+
+        fprintf(file, default_layout);
+        fclose(file);
+
+        clean:
+        free(layout_path);
+        free(layout_dir_path);
+      }
 }
