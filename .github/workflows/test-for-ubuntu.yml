@@ -26,11 +26,7 @@ jobs:
         sudo apt-get install -y libgtk-4-dev
 
     - name: Configure CMake
-      env:
-        CC: ${{matrix.compiler}}
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -DCMAKE_C_COMPILER=${{matrix.c_compiler}} -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
-      env:
-        CC: ${{matrix.compiler}}
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
