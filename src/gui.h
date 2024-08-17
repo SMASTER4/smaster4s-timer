@@ -6,6 +6,7 @@ struct timer_entry_state {
   GtkEntry* timer_entry;
   guint timer_entry_update_tag;
   GtkMediaStream* timer_media_stream;
+  int (*timer_length)[3];
 };
 
 extern int gui_run(int argc, char** argv);
@@ -22,4 +23,4 @@ static void _timer_toggle(struct timer_entry_state* timer_entry_state);
 
 static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state);
 
-static void _timer_notify();
+static void _timer_notify(struct timer_entry_state* timer_entry_state);

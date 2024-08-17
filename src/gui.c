@@ -10,7 +10,7 @@
 #endif
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 #include <time.h>
 
 #include "gui.h"
@@ -99,6 +99,7 @@ static void _timer_toggle(struct timer_entry_state* timer_entry_state) {
   if(timer_entry_state->timer_entry == NULL)
     return;
 
+  timer_entry_state->timer_length = NULL;
   timer_entry_state->timer_entry_update_tag = g_timeout_add(1000, (GSourceFunc) _timer_entry_update, timer_entry_state);
 }
 
@@ -110,6 +111,10 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
   GtkEntryBuffer* timer_entry_buffer = gtk_entry_get_buffer(timer_entry_state->timer_entry);
   int parsed_delay_buffer[3];
   parse_delay(gtk_entry_buffer_get_text(timer_entry_buffer), parsed_delay_buffer);
+  if(timer_entry_state->timer_length == NULL) {
+    timer_entry_state->timer_length = malloc(sizeof(int) * 3);
+    memcpy(*timer_entry_state->timer_length, parsed_delay_buffer, sizeof(int) * 3);
+  }
   parsed_delay_buffer[2]--;
   for(size_t i = 2; i > 0; i--) {
     if(parsed_delay_buffer[i] < 0) {
@@ -119,7 +124,7 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
   }
   if(parsed_delay_buffer[0] < 0) {
     timer_entry_state->timer_entry_update_tag = 0;
-    _timer_notify();
+    _timer_notify(timer_entry_state);
     return FALSE;
   }
   char* updated_delay_formated = format_delay(parsed_delay_buffer);
@@ -129,8 +134,16 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
   return TRUE;
 }
 
-static void _timer_notify() {
-  GNotification* notification = g_notification_new("Timer ended");
+static void _timer_notify(struct timer_entry_state* timer_entry_state) {
+  if(timer_entry_state == NULL || timer_entry_state->timer_length == NULL)
+    return;
+  char* formated_delay = format_delay(*timer_entry_state->timer_length);
+  size_t notification_title_length = strlen("Timer  ended") + strlen(formated_delay) + 1;
+  char* notification_title = malloc(notification_title_length);
+  snprintf(notification_title, notification_title_length, "Timer %s ended", formated_delay);
+  free(formated_delay);
+  GNotification* notification = g_notification_new(notification_title);
+  free(notification_title);
   g_notification_add_button(notification, "Okay", "app.button");
   GApplication* app = g_application_get_default();
   g_application_send_notification(app, NULL, notification);
