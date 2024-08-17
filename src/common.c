@@ -88,7 +88,7 @@ extern void create_layout_if_required() {
       goto clean;
     }
 
-    fprintf(file, default_layout);
+    fprintf(file, DEFAULT_LAYOUT);
     fclose(file);
 
     clean:
