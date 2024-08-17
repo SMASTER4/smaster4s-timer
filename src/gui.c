@@ -122,12 +122,10 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
     _timer_notify();
     return FALSE;
   }
-  size_t updated_delay_formated_length = get_lenght_as_string(parsed_delay_buffer[0]) + get_lenght_as_string(parsed_delay_buffer[1]) + get_lenght_as_string(parsed_delay_buffer[2]) + 2 + 1;
-  char* updated_delay_formated = g_malloc(updated_delay_formated_length);
-  snprintf(updated_delay_formated, updated_delay_formated_length, "%d:%d:%d", parsed_delay_buffer[0], parsed_delay_buffer[1], parsed_delay_buffer[2]);
+  char* updated_delay_formated = format_delay(parsed_delay_buffer);
   gtk_entry_buffer_set_text(timer_entry_buffer, updated_delay_formated, strlen(updated_delay_formated));
 
-  g_free(updated_delay_formated);
+  free(updated_delay_formated);
   return TRUE;
 }
 

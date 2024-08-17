@@ -12,3 +12,6 @@ extern const unsigned short int get_lenght_as_string(const unsigned int value);
 extern char* get_config_path(const char* additional_config_path);
 
 extern void create_layout_if_required();
+
+// 0FC
+extern char* format_delay(const int delay[3]);
