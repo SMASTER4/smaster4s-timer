@@ -106,7 +106,7 @@ extern char* format_delay(const int delay[3]) {
   return delay_formated;
 }
 
-extern void get_language(char language_buffer[256]) {
+extern void get_language(char language_buffer[INI_LINE_DATA_SIZE]) {
     if(language_buffer == NULL)
       return;
     *language_buffer = '\0';
@@ -116,7 +116,7 @@ extern void get_language(char language_buffer[256]) {
     free(config_file_path);
 }
 
-extern void get_translation(char translation_buffer[256], const char* language, const char* translation_name, const char* fallback) {
+extern void get_translation(char translation_buffer[INI_LINE_DATA_SIZE], const char* language, const char* translation_name, const char* fallback) {
   if(translation_buffer == NULL)
     return;
   *translation_buffer = '\0';
@@ -129,5 +129,5 @@ extern void get_translation(char translation_buffer[256], const char* language, 
   ini_get_str(translation_buffer, translation_file_path, language, translation_name);
   free(translation_file_path);
   if(*translation_buffer == '\0')
-    strncpy(translation_buffer, fallback, 256);
+    strncpy(translation_buffer, fallback, INI_LINE_DATA_SIZE);
 }
