@@ -30,7 +30,7 @@ jobs:
         git clone https://github.com/SMASTER4/smaster4s-inis
         cd smaster4s-inis
         cmake -DCMAKE_C_COMPILER=${{matrix.c_compiler}} -B ${{github.workspace}}/build/smaster4s-inis -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-        cmake --build ${{github.workspace}}/build/smaster4s-inis --config ${{env.BUILD_TYPE}}
+        make
         sudo make install
 
     - name: Configure CMake
