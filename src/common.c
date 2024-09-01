@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <math.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #ifdef __unix__
@@ -106,6 +107,33 @@ extern char* format_delay(const int delay[3]) {
   return delay_formated;
 }
 
+extern char* get_tranlation_file_text() {
+  static char* file_text = NULL;
+  if(file_text != NULL)
+    return file_text;
+
+  char* translation_file_path = get_config_path("translations.ini");
+  FILE* file = fopen(translation_file_path, "r");
+  if(file == NULL)
+    return NULL;
+
+  fseek(file, 0, SEEK_END);
+  size_t file_size = ftell(file);
+  rewind(file);
+
+  char current;
+  file_text = malloc(file_size + sizeof('\0'));
+  for(int i = 0; i < file_size; i++) {
+    if((current = fgetc(file)) == EOF)
+      break;
+    file_text[i] = current;
+  }
+  file_text[file_size] = '\0';
+
+  free(translation_file_path);
+  return file_text;
+}
+
 extern void get_language(char language_buffer[INI_LINE_DATA_SIZE]) {
     if(language_buffer == NULL)
       return;
@@ -117,7 +145,8 @@ extern void get_language(char language_buffer[INI_LINE_DATA_SIZE]) {
 }
 
 extern void get_translation(char translation_buffer[INI_LINE_DATA_SIZE], const char* language, const char* translation_name, const char* fallback) {
-  if(translation_buffer == NULL)
+  char* file_text = get_tranlation_file_text();
+  if(file_text == NULL || translation_buffer == NULL)
     return;
   *translation_buffer = '\0';
   if(translation_name == NULL)
@@ -125,9 +154,7 @@ extern void get_translation(char translation_buffer[INI_LINE_DATA_SIZE], const c
   if(language == NULL || *language == '\0')
     language = "en";
 
-  char* translation_file_path = get_config_path("translations.ini");
-  ini_get_str(translation_buffer, translation_file_path, language, translation_name);
-  free(translation_file_path);
+  ini_get_str_from_str(translation_buffer, file_text, language, translation_name);
   if(*translation_buffer == '\0')
     strncpy(translation_buffer, fallback, INI_LINE_DATA_SIZE);
 }
