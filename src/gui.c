@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <smaster4s-inis.h>
 
 #ifdef __unix__
 #include <unistd.h>
@@ -137,14 +138,22 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
 static void _timer_notify(struct timer_entry_state* timer_entry_state) {
   if(timer_entry_state == NULL || timer_entry_state->timer_length == NULL)
     return;
+
   char* formated_delay = format_delay(*timer_entry_state->timer_length);
-  size_t notification_title_length = strlen("Timer  ended") + strlen(formated_delay) + 1;
+  char language_buffer[INI_LINE_DATA_SIZE];
+  get_language(language_buffer);
+  char translation_buffer[INI_LINE_DATA_SIZE];
+  get_translation(translation_buffer, language_buffer, "ended_notification", "Timer %s ended");
+
+  size_t notification_title_length = strlen(translation_buffer) + strlen(formated_delay) + 1;
   char* notification_title = malloc(notification_title_length);
-  snprintf(notification_title, notification_title_length, "Timer %s ended", formated_delay);
+  snprintf(notification_title, notification_title_length, translation_buffer, formated_delay);
   free(formated_delay);
+
   GNotification* notification = g_notification_new(notification_title);
   free(notification_title);
-  g_notification_add_button(notification, "Okay", "app.button");
+  get_translation(translation_buffer, language_buffer, "accept_notification", "Okay");
+  g_notification_add_button(notification, translation_buffer, "app.button");
   GApplication* app = g_application_get_default();
   g_application_send_notification(app, NULL, notification);
 
