@@ -27,6 +27,7 @@ jobs:
 
     - name: Building smaster4s-inis
       run: |
+        cd ${{github.workspace}}/build
         git clone https://github.com/SMASTER4/smaster4s-inis
         cd ${{github.workspace}}/build/smaster4s-inis
         cmake -DCMAKE_C_COMPILER=${{matrix.c_compiler}} -B ${{github.workspace}}/build/smaster4s-inis -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
