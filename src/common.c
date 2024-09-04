@@ -22,6 +22,8 @@
 static const char* _config_relative_path = "/.config/smaster4s-timer/";
 #endif
 #ifdef _WIN32
+#define access _access
+
 static const char* _config_relative_path = "\\smaster4s-timer\\";
 #endif
 
@@ -77,32 +79,25 @@ extern char* get_config_path(const char* additional_path) {
 extern void create_layout_if_required() {
   char* layout_path = get_config_path("main.ui");
   char* layout_dir_path = get_config_path("");
-  if(
-    #ifdef __unix__
-    access(layout_path, R_OK)
-    #endif
-    #ifdef _WIN32
-    _access(layout_path, R_OK) // Yeah really its _access: https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/access-waccess
-    #endif
-    !=
-    0
-  ) {
-    struct stat st = {0};
-    if(stat(layout_dir_path, &st) != 0)
-      mkdir(layout_dir_path, 0777);
 
-    FILE* file = fopen(layout_path, "w");
-    if(file == NULL) {
-      printf("A fialure while trying to write to %s accured. Maybe you don't have the required premissions.\n", layout_path);
-      goto clean;
-    }
-    fprintf(file, DEFAULT_LAYOUT);
-    fclose(file);
+  if(access(layout_path, R_OK) == 0)
+    return;
 
-    clean:
-    free(layout_path);
-    free(layout_dir_path);
+  struct stat st = {0};
+  if(stat(layout_dir_path, &st) != 0)
+    mkdir(layout_dir_path, 0777);
+
+  FILE* file = fopen(layout_path, "w");
+  if(file == NULL) {
+    printf("A fialure while trying to write to %s accured. Maybe you don't have the required premissions.\n", layout_path);
+    goto clean;
   }
+  fprintf(file, DEFAULT_LAYOUT);
+  fclose(file);
+
+  clean:
+  free(layout_path);
+  free(layout_dir_path);
 }
 
 
