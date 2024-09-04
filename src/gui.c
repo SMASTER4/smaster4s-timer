@@ -19,12 +19,15 @@
 
 extern int gui_run(int argc, char** argv) {
   g_print("Application launches in GUI mode.\n");
+
   GtkApplication* app = gtk_application_new("de.smaster4.smaster4s-timer", G_APPLICATION_FLAGS_NONE);
   g_signal_connect(app, "activate", G_CALLBACK(_SIGNAL_app_activate), NULL);
   int status = g_application_run(G_APPLICATION(app), argc, argv);
+
   g_object_unref(app);
   return status;
 }
+
 
 static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
   _load_css();
@@ -64,13 +67,16 @@ static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
   g_object_unref(builder);
 }
 
+
 static void _SIGNAL_timer_entry_activate(GtkEntry* timer_entry, gpointer user_data) {
   _timer_toggle(user_data);
 }
 
+
 static void _SIGNAL_timer_button_clicked(GtkButton* timer_button, gpointer user_data) {
   _timer_toggle(user_data);
 }
+
 
 static void _load_css() {
   char* css_path = get_config_path("main.css");
@@ -86,6 +92,7 @@ static void _load_css() {
   g_object_unref(provider);
   free(css_path);
 }
+
 
 static void _timer_toggle(struct timer_entry_state* timer_entry_state) {
   if(timer_entry_state == NULL)
@@ -104,18 +111,23 @@ static void _timer_toggle(struct timer_entry_state* timer_entry_state) {
   timer_entry_state->timer_entry_update_tag = g_timeout_add(1000, (GSourceFunc) _timer_entry_update, timer_entry_state);
 }
 
+
 static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state) {
   if(timer_entry_state == NULL || timer_entry_state->timer_entry == NULL) {
     timer_entry_state->timer_entry_update_tag = 0;
     return FALSE;
   }
+
   GtkEntryBuffer* timer_entry_buffer = gtk_entry_get_buffer(timer_entry_state->timer_entry);
+
   int parsed_delay_buffer[3];
   parse_delay(gtk_entry_buffer_get_text(timer_entry_buffer), parsed_delay_buffer);
+
   if(timer_entry_state->timer_length == NULL) {
     timer_entry_state->timer_length = malloc(sizeof(int) * 3);
     memcpy(*timer_entry_state->timer_length, parsed_delay_buffer, sizeof(int) * 3);
   }
+
   parsed_delay_buffer[2]--;
   for(size_t i = 2; i > 0; i--) {
     if(parsed_delay_buffer[i] < 0) {
@@ -128,6 +140,7 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
     _timer_notify(timer_entry_state);
     return FALSE;
   }
+
   char* updated_delay_formated = format_delay(parsed_delay_buffer);
   gtk_entry_buffer_set_text(timer_entry_buffer, updated_delay_formated, strlen(updated_delay_formated));
 
@@ -135,15 +148,18 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
   return TRUE;
 }
 
+
 static void _timer_notify(struct timer_entry_state* timer_entry_state) {
   if(timer_entry_state == NULL || timer_entry_state->timer_length == NULL)
     return;
 
-  char* formated_delay = format_delay(*timer_entry_state->timer_length);
   char language_buffer[INI_LINE_DATA_SIZE];
-  get_language(language_buffer);
   char translation_buffer[INI_LINE_DATA_SIZE];
+
+  get_language(language_buffer);
   get_translation(translation_buffer, language_buffer, "ended_notification", "Timer %s ended");
+
+  char* formated_delay = format_delay(*timer_entry_state->timer_length);
 
   size_t notification_title_length = strlen(translation_buffer) + strlen(formated_delay) + 1;
   char* notification_title = malloc(notification_title_length);
