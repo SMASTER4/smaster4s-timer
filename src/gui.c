@@ -52,14 +52,17 @@ static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
   if(timer_entry != NULL) {
     timer_entry_state = g_malloc(sizeof(struct timer_entry_state));
     timer_entry_state->timer_entry = GTK_ENTRY(timer_entry);
+    timer_entry_state->timer_button = NULL;
     timer_entry_state->timer_entry_update_tag = 0;
     g_signal_connect(GTK_ENTRY(timer_entry), "activate", G_CALLBACK(_SIGNAL_timer_entry_activate), timer_entry_state);
   }
 
   GObject* timer_button = gtk_builder_get_object(builder, "timer_button");
   if(timer_button != NULL)
-    if(timer_entry != NULL)
+    if(timer_entry != NULL) {
+      timer_entry_state->timer_button = GTK_BUTTON(timer_button);
       g_signal_connect(GTK_BUTTON(timer_button), "clicked", G_CALLBACK(_SIGNAL_timer_button_clicked), timer_entry_state);
+    }
     else
       g_warning("You can't use the timer_button without a time_entry");
 
@@ -101,6 +104,7 @@ static void _timer_toggle(struct timer_entry_state* timer_entry_state) {
   if(timer_entry_state->timer_entry_update_tag != 0) {
     g_source_remove(timer_entry_state->timer_entry_update_tag);
     timer_entry_state->timer_entry_update_tag = 0;
+    _timer_button_swap(timer_entry_state);
     return;
   }
 
@@ -109,6 +113,7 @@ static void _timer_toggle(struct timer_entry_state* timer_entry_state) {
 
   timer_entry_state->timer_length = NULL;
   timer_entry_state->timer_entry_update_tag = g_timeout_add(1000, (GSourceFunc) _timer_entry_update, timer_entry_state);
+  _timer_button_swap(timer_entry_state);
 }
 
 
@@ -137,6 +142,7 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
   }
   if(parsed_delay_buffer[0] < 0) {
     timer_entry_state->timer_entry_update_tag = 0;
+    _timer_button_swap(timer_entry_state);
     _timer_notify(timer_entry_state);
     return FALSE;
   }
@@ -146,6 +152,23 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
 
   free(updated_delay_formated);
   return TRUE;
+}
+
+
+static void _timer_button_swap(struct timer_entry_state* timer_entry_state) {
+  if(timer_entry_state->timer_button == NULL)
+    return;
+
+  char language_buffer[INI_LINE_DATA_SIZE];
+  char translation_buffer[INI_LINE_DATA_SIZE];
+
+  get_language(language_buffer);
+  if(timer_entry_state->timer_entry_update_tag == 0)
+    get_translation(translation_buffer, language_buffer, "start_timer", "Start Timer");
+  else
+    get_translation(translation_buffer, language_buffer, "stop_timer", "Stop Timer");
+
+  gtk_button_set_label(timer_entry_state->timer_button, translation_buffer);
 }
 
 

@@ -4,8 +4,8 @@
 
 struct timer_entry_state {
   GtkEntry* timer_entry;
+  GtkButton* timer_button;
   guint timer_entry_update_tag;
-  GtkMediaStream* timer_media_stream;
   int (*timer_length)[3];
 };
 
@@ -22,5 +22,7 @@ static void _load_css();
 static void _timer_toggle(struct timer_entry_state* timer_entry_state);
 
 static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state);
+
+static void _timer_button_swap(struct timer_entry_state* timer_entry_state);
 
 static void _timer_notify(struct timer_entry_state* timer_entry_state);
