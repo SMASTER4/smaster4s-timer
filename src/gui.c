@@ -144,6 +144,7 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
       _timer_notify(timer_entry_state);
       char* updated_delay_formated = format_delay(parsed_delay_buffer);
       gtk_entry_buffer_set_text(timer_entry_buffer, updated_delay_formated, strlen(updated_delay_formated));
+      free(updated_delay_formated);
       return FALSE;
     }
   }
