@@ -134,17 +134,25 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
   }
 
   parsed_delay_buffer[2]--;
+
+  for(size_t i = 0; i < 3; i++) {
+    if(parsed_delay_buffer[i] != 0)
+      break;
+    if(i == 2) {
+      timer_entry_state->timer_entry_update_tag = 0;
+      _timer_button_swap(timer_entry_state);
+      _timer_notify(timer_entry_state);
+      char* updated_delay_formated = format_delay(parsed_delay_buffer);
+      gtk_entry_buffer_set_text(timer_entry_buffer, updated_delay_formated, strlen(updated_delay_formated));
+      return FALSE;
+    }
+  }
+
   for(size_t i = 2; i > 0; i--) {
     if(parsed_delay_buffer[i] < 0) {
       parsed_delay_buffer[i] += 60;
       parsed_delay_buffer[i - 1] -= floor(parsed_delay_buffer[i] / 60) + 1;
     }
-  }
-  if(parsed_delay_buffer[0] < 0) {
-    timer_entry_state->timer_entry_update_tag = 0;
-    _timer_button_swap(timer_entry_state);
-    _timer_notify(timer_entry_state);
-    return FALSE;
   }
 
   char* updated_delay_formated = format_delay(parsed_delay_buffer);
