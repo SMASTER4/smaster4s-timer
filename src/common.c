@@ -39,6 +39,8 @@ extern void parse_delay(const char* delay_as_string, int parsed_delay_buffer[3])
       current_time_unit++;
       continue;
     }
+    if(delay_as_string[i] > '9' || delay_as_string[i] < '0')
+      continue;
     parsed_delay_buffer[current_time_unit] *= 10;
     parsed_delay_buffer[current_time_unit] += delay_as_string[i] - '0';
   }
