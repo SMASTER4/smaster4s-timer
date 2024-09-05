@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <smaster4s-inis.h>
+#include <sys/stat.h>
 
 #ifdef __unix__
 #include <unistd.h>
@@ -133,20 +134,24 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
     memcpy(*timer_entry_state->timer_length, parsed_delay_buffer, sizeof(int) * 3);
   }
 
+  const int empty_array[3] = {0, 0, 0};
+
+  if(memcmp(parsed_delay_buffer, empty_array, sizeof(parsed_delay_buffer)) == 0) {
+    timer_entry_state->timer_entry_update_tag = 0;
+    _timer_button_swap(timer_entry_state);
+    return FALSE;
+  }
+
   parsed_delay_buffer[2]--;
 
-  for(size_t i = 0; i < 3; i++) {
-    if(parsed_delay_buffer[i] != 0)
-      break;
-    if(i == 2) {
-      timer_entry_state->timer_entry_update_tag = 0;
-      _timer_button_swap(timer_entry_state);
-      _timer_notify(timer_entry_state);
-      char* updated_delay_formated = format_delay(parsed_delay_buffer);
-      gtk_entry_buffer_set_text(timer_entry_buffer, updated_delay_formated, strlen(updated_delay_formated));
-      free(updated_delay_formated);
-      return FALSE;
-    }
+  if(memcmp(parsed_delay_buffer, empty_array, sizeof(parsed_delay_buffer)) == 0) {
+    timer_entry_state->timer_entry_update_tag = 0;
+    _timer_notify(timer_entry_state);
+
+    _timer_button_swap(timer_entry_state);
+    _timer_entry_update_change_text(parsed_delay_buffer, timer_entry_buffer);
+
+    return FALSE;
   }
 
   for(size_t i = 2; i > 0; i--) {
@@ -156,11 +161,17 @@ static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state)
     }
   }
 
-  char* updated_delay_formated = format_delay(parsed_delay_buffer);
+  _timer_entry_update_change_text(parsed_delay_buffer, timer_entry_buffer);
+
+  return TRUE;
+}
+
+
+static inline void _timer_entry_update_change_text(int parsed_delay[3], GtkEntryBuffer* timer_entry_buffer) {
+  char* updated_delay_formated = format_delay(parsed_delay);
   gtk_entry_buffer_set_text(timer_entry_buffer, updated_delay_formated, strlen(updated_delay_formated));
 
   free(updated_delay_formated);
-  return TRUE;
 }
 
 

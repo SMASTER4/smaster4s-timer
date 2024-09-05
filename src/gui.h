@@ -23,6 +23,8 @@ static void _timer_toggle(struct timer_entry_state* timer_entry_state);
 
 static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state);
 
+static inline void _timer_entry_update_change_text(int parsed_delay[3], GtkEntryBuffer* timer_entry_buffer);
+
 static void _timer_button_swap(struct timer_entry_state* timer_entry_state);
 
 static void _timer_notify(struct timer_entry_state* timer_entry_state);
