@@ -18,13 +18,15 @@ which is licensed under the [GNU Lesser General Public License v2.1](https://www
 + **GTK4**
 + **S-Master4s-INIs**
 + **CMake** 3.12 or higher
-+ A **C11 compiler**(We recommend GCC, because it ships with many Distros preinstalled.)
++ A **C11 compiler**(GCC is recommended, because it ships with many Distros preinstalled.)
 + A building system compatible with your compiler and cmake(When using GCC make is the best option, because it's part of the GCC suit)
 + **git**(optional, but still recommended)
 
 **If you know that you have all of those things already installed, you can skip to *Acctually Building the project*.**
 
 #### GTK4
+GTK is a multi-platform library to create Graphical Applications.
+It is used to create the graphical UI for this application.
 I don't know anyway of making sure someone has GTK installed,
 but most Distros ship with it on default so there is mostly no need to install it,
 but if you encounter issues just run:
@@ -44,6 +46,9 @@ It is currently required, but there is work being done to make it optional.
 The only thing you need to do is build and install it with this [guide](https://github.com/SMASTER4/smaster4s-inis/blob/main/README.md).
 
 #### CMake
+CMake can generate files for other build system and is platform independent.
+It is a build system for build systems to say simple.
+It is used in this project to allow for platform and build system independent building.
 To verify that CMake is installed on the right version try running:
 ```bash
 cmake --version
@@ -81,9 +86,9 @@ Like I said before if neither of those is your operating system trying to instal
 If you Windows using MinGW-w64 should also work.
 
 #### Git
-This point is optional, but if you haven't allready installed the sources.
-The recommended way of doing this is by using Git.
-If you don't, if you installed Git jus run:
+Git is a popular version control tool.
+You can use Git to download the sources
+If you don't, if you installed Git just run:
 ```bash
 git --version
 ```
