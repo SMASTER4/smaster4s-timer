@@ -16,6 +16,7 @@ which is licensed under the [GNU Lesser General Public License v2.1](https://www
 ### Building requirements
 **You need**:
 + **GTK4**
++ **S-Master4s-INIs**
 + **CMake** 3.12 or higher
 + A **C11 compiler**(We recommend GCC, because it ships with many Distros preinstalled.)
 + A building system compatible with your compiler and cmake(When using GCC make is the best option, because it's part of the GCC suit)
@@ -36,6 +37,11 @@ and **on Arch Linux**:
 ```bash
 sudo pacman -S gtk4
 ```
+
+#### S-Master4s-INIs
+S-Master4s-INIs is a INI parsing library and its used to parse some config files for the project.
+It is currently required, but there is work being done to make it optional.
+The only thing you need to do is build and install it with this [guide](https://github.com/SMASTER4/smaster4s-inis/blob/main/README.md).
 
 #### CMake
 To verify that CMake is installed on the right version try running:
