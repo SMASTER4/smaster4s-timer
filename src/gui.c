@@ -147,7 +147,7 @@ static gboolean _timer_entry_update(struct application_state* application_state)
     _timer_notify(application_state);
 
     _timer_button_swap(application_state);
-    _timer_entry_update_change_text(parsed_delay_buffer, timer_entry_buffer);
+    _timer_entry_update_change_text(parsed_delay_buffer, application_state->timer_entry);
 
     return FALSE;
   }
@@ -159,15 +159,20 @@ static gboolean _timer_entry_update(struct application_state* application_state)
     }
   }
 
-  _timer_entry_update_change_text(parsed_delay_buffer, timer_entry_buffer);
+  _timer_entry_update_change_text(parsed_delay_buffer, application_state->timer_entry);
 
   return TRUE;
 }
 
 
-static inline void _timer_entry_update_change_text(int parsed_delay[3], GtkEntryBuffer* timer_entry_buffer) {
+static inline void _timer_entry_update_change_text(int parsed_delay[3], GtkEntry* timer_entry) {
+  int timer_entry_positon_before_update = gtk_editable_get_position(GTK_EDITABLE(timer_entry));
+
   char* updated_delay_formated = format_delay(parsed_delay);
+  GtkEntryBuffer* timer_entry_buffer = gtk_entry_get_buffer(timer_entry);
   gtk_entry_buffer_set_text(timer_entry_buffer, updated_delay_formated, strlen(updated_delay_formated));
+
+  gtk_editable_set_position(GTK_EDITABLE(timer_entry), timer_entry_positon_before_update);
 
   free(updated_delay_formated);
 }
