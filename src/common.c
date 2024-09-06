@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <threads.h>
 #ifdef __unix__
 #include <unistd.h>
 #endif
@@ -35,9 +36,21 @@ extern void parse_delay(const char* delay_as_string, int parsed_delay_buffer[3])
   short unsigned int current_time_unit = 0;
 
   for(size_t i = 0; i < strlen(delay_as_string) && current_time_unit < 3; i++) {
-    if(delay_as_string[i] == ':') {
-      current_time_unit++;
-      continue;
+    switch(delay_as_string[i]) {
+      case 'h':
+        current_time_unit = 0;
+        continue;
+      case 'm':
+        current_time_unit = 1;
+        continue;
+      case 's':
+        current_time_unit = 2;
+        continue;
+      case ':':
+        current_time_unit++;
+        continue;
+      default:
+        break;
     }
     if(delay_as_string[i] > '9' || delay_as_string[i] < '0')
       continue;
