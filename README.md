@@ -20,7 +20,7 @@ which is licensed under the [GNU Lesser General Public License v2.1](https://www
 + **CMake** 3.12 or higher
 + A **C11 compiler**(GCC is recommended, because it ships with many Distros preinstalled.)
 + A building system compatible with your compiler and cmake(When using GCC make is the best option, because it's part of the GCC suit)
-+ **git**(optional, but still recommended)
++ **Git™**(optional, but still recommended)
 
 **If you know that you have all of those things already installed, you can skip to *Acctually Building the project*.**
 
@@ -85,10 +85,10 @@ sudo pacman -S gcc
 Like I said before if neither of those is your operating system trying to install a package called gcc with your package manager should on most Distros install gcc.
 If you are using Windows MinGW-w64 should also work.
 
-#### Git
+#### Git™
 Git is a popular version control tool.
-You can use Git to download the sources
-If you don't, if you installed Git just run:
+You can use Git™ to download the sources
+If you don't, if you installed Git™ just run:
 ```bash
 git --version
 ```
