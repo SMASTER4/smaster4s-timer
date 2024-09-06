@@ -70,7 +70,7 @@ extern char* get_config_path(const char* additional_path) {
     return NULL;
   }
 
-  const size_t config_full_path_length = strlen(home_path) + strlen(_config_relative_path) + strlen(additional_path) + 1;
+  const size_t config_full_path_length = strlen(home_path) + strlen(_config_relative_path) + strlen(additional_path) + sizeof('\0');
   char* config_full_path = malloc(config_full_path_length);
   snprintf(config_full_path, config_full_path_length, "%s%s%s", home_path, _config_relative_path, additional_path);
 
@@ -104,7 +104,7 @@ extern void create_layout_if_required() {
 
 
 extern char* format_delay(const int delay[3]) {
-  size_t delay_formated_length = get_lenght_as_string(delay[0]) + get_lenght_as_string(delay[1]) + get_lenght_as_string(delay[2]) + 2 + 1;
+  size_t delay_formated_length = get_lenght_as_string(delay[0]) + sizeof(':') + get_lenght_as_string(delay[1]) + sizeof(':') + get_lenght_as_string(delay[2]) + sizeof('\0');
   char* delay_formated = malloc(delay_formated_length);
   snprintf(delay_formated, delay_formated_length, "%d:%d:%d", delay[0], delay[1], delay[2]);
   return delay_formated;

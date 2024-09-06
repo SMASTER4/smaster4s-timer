@@ -202,7 +202,7 @@ static void _timer_notify(struct timer_entry_state* timer_entry_state) {
 
   char* formated_delay = format_delay(*timer_entry_state->timer_length);
 
-  size_t notification_title_length = strlen(translation_buffer) + strlen(formated_delay) + 1;
+  size_t notification_title_length = strlen(translation_buffer) + strlen(formated_delay) + sizeof('\0');
   char* notification_title = malloc(notification_title_length);
   snprintf(notification_title, notification_title_length, translation_buffer, formated_delay);
   free(formated_delay);
