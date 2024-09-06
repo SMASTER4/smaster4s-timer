@@ -1,7 +1,7 @@
 # About
 This is a easy to use GTK based timer primarly for Linux. That's it, nothing revolutionary.
 I just made it, because I miss a timer.
-I know that there are about 1,000 other open source timers for Linux, but **I DON'T CARE**.
+I know that there are about 1,000 other open source timers for Linux based Operating Systems, but **I DON'T CARE**.
 It's my little simplicit timer. No fancy cool looking UI just GTK.
 I don't think there is much else to say.
 
