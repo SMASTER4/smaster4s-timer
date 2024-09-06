@@ -83,7 +83,7 @@ sudo apt install gcc
 sudo pacman -S gcc
 ```
 Like I said before if neither of those is your operating system trying to install a package called gcc with your package manager should on most Distros install gcc.
-If you Windows using MinGW-w64 should also work.
+If you are using Windows MinGW-w64 should also work.
 
 #### Git
 Git is a popular version control tool.
