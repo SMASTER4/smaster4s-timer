@@ -2,7 +2,7 @@
 
 #include <gtk/gtk.h>
 
-struct timer_entry_state {
+struct application_state {
   GtkEntry* timer_entry;
   GtkButton* timer_button;
   guint timer_entry_update_tag;
@@ -19,12 +19,12 @@ static void _SIGNAL_timer_button_clicked(GtkButton* timer_button, gpointer user_
 
 static void _load_css();
 
-static void _timer_toggle(struct timer_entry_state* timer_entry_state);
+static void _timer_toggle(struct application_state* application_state);
 
-static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state);
+static gboolean _timer_entry_update(struct application_state* application_state);
 
 static inline void _timer_entry_update_change_text(int parsed_delay[3], GtkEntryBuffer* timer_entry_buffer);
 
-static void _timer_button_swap(struct timer_entry_state* timer_entry_state);
+static void _timer_button_swap(struct application_state* application_state);
 
-static void _timer_notify(struct timer_entry_state* timer_entry_state);
+static void _timer_notify(struct application_state* application_state);

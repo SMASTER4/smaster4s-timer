@@ -49,20 +49,20 @@ static void _SIGNAL_app_activate(GtkApplication* app, gpointer user_data) {
   gtk_window_set_application(GTK_WINDOW(window), app);
 
   GObject* timer_entry = gtk_builder_get_object(builder, "timer_entry");
-  struct timer_entry_state* timer_entry_state;
+  struct application_state* application_state;
   if(timer_entry != NULL) {
-    timer_entry_state = g_malloc(sizeof(struct timer_entry_state));
-    timer_entry_state->timer_entry = GTK_ENTRY(timer_entry);
-    timer_entry_state->timer_button = NULL;
-    timer_entry_state->timer_entry_update_tag = 0;
-    g_signal_connect(GTK_ENTRY(timer_entry), "activate", G_CALLBACK(_SIGNAL_timer_entry_activate), timer_entry_state);
+    application_state = g_malloc(sizeof(struct application_state));
+    application_state->timer_entry = GTK_ENTRY(timer_entry);
+    application_state->timer_button = NULL;
+    application_state->timer_entry_update_tag = 0;
+    g_signal_connect(GTK_ENTRY(timer_entry), "activate", G_CALLBACK(_SIGNAL_timer_entry_activate), application_state);
   }
 
   GObject* timer_button = gtk_builder_get_object(builder, "timer_button");
   if(timer_button != NULL)
     if(timer_entry != NULL) {
-      timer_entry_state->timer_button = GTK_BUTTON(timer_button);
-      g_signal_connect(GTK_BUTTON(timer_button), "clicked", G_CALLBACK(_SIGNAL_timer_button_clicked), timer_entry_state);
+      application_state->timer_button = GTK_BUTTON(timer_button);
+      g_signal_connect(GTK_BUTTON(timer_button), "clicked", G_CALLBACK(_SIGNAL_timer_button_clicked), application_state);
     }
     else
       g_warning("You can't use the timer_button without a time_entry");
@@ -96,57 +96,57 @@ static void _load_css() {
 }
 
 
-static void _timer_toggle(struct timer_entry_state* timer_entry_state) {
-  if(timer_entry_state == NULL)
+static void _timer_toggle(struct application_state* application_state) {
+  if(application_state == NULL)
     return;
 
-  if(timer_entry_state->timer_entry_update_tag != 0) {
-    g_source_remove(timer_entry_state->timer_entry_update_tag);
-    timer_entry_state->timer_entry_update_tag = 0;
-    _timer_button_swap(timer_entry_state);
+  if(application_state->timer_entry_update_tag != 0) {
+    g_source_remove(application_state->timer_entry_update_tag);
+    application_state->timer_entry_update_tag = 0;
+    _timer_button_swap(application_state);
     return;
   }
 
-  if(timer_entry_state->timer_entry == NULL)
+  if(application_state->timer_entry == NULL)
     return;
 
-  timer_entry_state->timer_length = NULL;
-  timer_entry_state->timer_entry_update_tag = g_timeout_add(1000, (GSourceFunc) _timer_entry_update, timer_entry_state);
-  _timer_button_swap(timer_entry_state);
+  application_state->timer_length = NULL;
+  application_state->timer_entry_update_tag = g_timeout_add(1000, (GSourceFunc) _timer_entry_update, application_state);
+  _timer_button_swap(application_state);
 }
 
 
-static gboolean _timer_entry_update(struct timer_entry_state* timer_entry_state) {
-  if(timer_entry_state == NULL || timer_entry_state->timer_entry == NULL) {
-    timer_entry_state->timer_entry_update_tag = 0;
+static gboolean _timer_entry_update(struct application_state* application_state) {
+  if(application_state == NULL || application_state->timer_entry == NULL) {
+    application_state->timer_entry_update_tag = 0;
     return FALSE;
   }
 
-  GtkEntryBuffer* timer_entry_buffer = gtk_entry_get_buffer(timer_entry_state->timer_entry);
+  GtkEntryBuffer* timer_entry_buffer = gtk_entry_get_buffer(application_state->timer_entry);
 
   int parsed_delay_buffer[3];
   parse_delay(gtk_entry_buffer_get_text(timer_entry_buffer), parsed_delay_buffer);
 
-  if(timer_entry_state->timer_length == NULL) {
-    timer_entry_state->timer_length = malloc(sizeof(int) * 3);
-    memcpy(*timer_entry_state->timer_length, parsed_delay_buffer, sizeof(int) * 3);
+  if(application_state->timer_length == NULL) {
+    application_state->timer_length = malloc(sizeof(int) * 3);
+    memcpy(*application_state->timer_length, parsed_delay_buffer, sizeof(int) * 3);
   }
 
   const int empty_array[3] = {0, 0, 0};
 
   if(memcmp(parsed_delay_buffer, empty_array, sizeof(parsed_delay_buffer)) == 0) {
-    timer_entry_state->timer_entry_update_tag = 0;
-    _timer_button_swap(timer_entry_state);
+    application_state->timer_entry_update_tag = 0;
+    _timer_button_swap(application_state);
     return FALSE;
   }
 
   parsed_delay_buffer[2]--;
 
   if(memcmp(parsed_delay_buffer, empty_array, sizeof(parsed_delay_buffer)) == 0) {
-    timer_entry_state->timer_entry_update_tag = 0;
-    _timer_notify(timer_entry_state);
+    application_state->timer_entry_update_tag = 0;
+    _timer_notify(application_state);
 
-    _timer_button_swap(timer_entry_state);
+    _timer_button_swap(application_state);
     _timer_entry_update_change_text(parsed_delay_buffer, timer_entry_buffer);
 
     return FALSE;
@@ -173,25 +173,25 @@ static inline void _timer_entry_update_change_text(int parsed_delay[3], GtkEntry
 }
 
 
-static void _timer_button_swap(struct timer_entry_state* timer_entry_state) {
-  if(timer_entry_state->timer_button == NULL)
+static void _timer_button_swap(struct application_state* application_state) {
+  if(application_state->timer_button == NULL)
     return;
 
   char language_buffer[INI_LINE_DATA_SIZE];
   char translation_buffer[INI_LINE_DATA_SIZE];
 
   get_language(language_buffer);
-  if(timer_entry_state->timer_entry_update_tag == 0)
+  if(application_state->timer_entry_update_tag == 0)
     get_translation(translation_buffer, language_buffer, "start_timer", "Start Timer");
   else
     get_translation(translation_buffer, language_buffer, "stop_timer", "Stop Timer");
 
-  gtk_button_set_label(timer_entry_state->timer_button, translation_buffer);
+  gtk_button_set_label(application_state->timer_button, translation_buffer);
 }
 
 
-static void _timer_notify(struct timer_entry_state* timer_entry_state) {
-  if(timer_entry_state == NULL || timer_entry_state->timer_length == NULL)
+static void _timer_notify(struct application_state* application_state) {
+  if(application_state == NULL || application_state->timer_length == NULL)
     return;
 
   char language_buffer[INI_LINE_DATA_SIZE];
@@ -200,7 +200,7 @@ static void _timer_notify(struct timer_entry_state* timer_entry_state) {
   get_language(language_buffer);
   get_translation(translation_buffer, language_buffer, "ended_notification", "Timer %s ended");
 
-  char* formated_delay = format_delay(*timer_entry_state->timer_length);
+  char* formated_delay = format_delay(*application_state->timer_length);
 
   size_t notification_title_length = strlen(translation_buffer) + strlen(formated_delay) + sizeof('\0');
   char* notification_title = malloc(notification_title_length);
