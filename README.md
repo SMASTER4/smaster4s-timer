@@ -102,27 +102,33 @@ sudo pacman -S git
 ```bash
 git clone "https://github.com/SMASTER4/smaster4s-timer/"
 ```
+
 2. To work more effectively changing your working directory makes sense(This is entierly optional.):
 ```bash
 cd smaster4s-timer
 ```
+
 3. Usally you'd want to create a new directory to build your project in.(This is also entierly optional.) Do this by running:
 ```bash
 mkdir out # You can change the name to be anything you want
 ```
+
 4. Now we can just jump inside the directory we created:
 ```bash
 cd out # Keep in mind that you need to change the name if you've used a different name
 ```
+
 5. It's time to finally start building the CMake stuff by running:
 ```bash
 cmake ..
 ```
 Now some new files and directory's should appear inside your out or whatever name you have choosen directory.
 If it doesn't, try analysing the issue based on the output of the last command.
+
 6. Now we can finally build the real binary. We do this differently depending on the compiler and building tool you chose.
 Look at the documentation of your toolchain if you are unsure what to do, but if we are using GCC and Make you can just do:
 ```bash
 make
 ```
+
 7. You are done. The final binary should now appear inside your choosen output directory.
