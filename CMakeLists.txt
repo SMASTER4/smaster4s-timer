@@ -12,4 +12,6 @@ include_directories(${GTK4_INCLUDE_DIRS} ${SMASTER4S-INIS_INCLUDE_DIRS} res)
 link_directories(${GTK4_LIBRARY_DIRS} ${SMASTER4S-INIS_LIBRARY_DIRS})
 add_definitions(${GTK4_CFLAGS_OTHER})
 
+add_compile_options(-O1)
+
 target_link_libraries(${PROJECT_NAME} ${GTK4_LIBRARIES} ${SMASTER4S-INIS_LIBRARIES} m)
